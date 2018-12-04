@@ -11,7 +11,7 @@ param (
 		[string]$ListTitle
 		)
 
-
+#creates the client context and verifies the connection/credentials
   $ctx=New-Object Microsoft.SharePoint.Client.ClientContext($url)
    [Microsoft.SharePOint.Client.ClientRuntimeContext] $rctx=[Microsoft.SharePoint.Client.ClientRuntimeContext]$ctx.Site.Context
   $ctx.Credentials = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($Username, $password)
@@ -26,6 +26,9 @@ param (
   $spqQuery.ViewXml ="<View Scope='RecursiveAll' /><Where><Eq><FieldRef Name='FileDirRef'/><Value Type='Text'>/sites/testflow/Customers/blank</Value></Eq></Where>";
 
  # $spqQuery.ViewXml ="<View Scope='RecursiveAll' />";
+ 
+ 
+ # the following lines handle number of items exceeding 5000
   $ViewThreshold=4000
 
   if($NumberOfItemsInTheList -gt $ViewThreshold)
@@ -60,6 +63,8 @@ param (
          $ctx.ExecuteQuery()
   }
 
+
+#counters for the final summary
   $CounterFolder=0;
   $CounterNotRecord=0;
   $CounterUndeclared=0;
@@ -74,6 +79,7 @@ param (
         $ctx.ExecuteQuery()
         Write-Host $item.Fieldvaluesastext.FieldValues["FileDirRef"] "/" $item.Fieldvaluesastext.FieldValues["FileLeafRef"] 
 
+#reject folders because they cannot be declared a record
         if($item.FileSystemObjectType -eq "Folder")
         {
             Write-Host "...This item cannot be declared a record because it is a Folder content type." -ForegroundColor Yellow
