@@ -27,7 +27,6 @@ param (
 
  # $spqQuery.ViewXml ="<View Scope='RecursiveAll' />";
  
- 
  # the following lines handle number of items exceeding 5000
   $ViewThreshold=4000
 
@@ -62,7 +61,6 @@ param (
          $ctx.Load($itemki)
          $ctx.ExecuteQuery()
   }
-
 
 #counters for the final summary
   $CounterFolder=0;
@@ -116,9 +114,6 @@ param (
 
        $ctx.Dispose()
 }
-
-
-
 
 
 
